@@ -450,6 +450,11 @@ export class FieldsComponent implements OnInit, AfterViewChecked {
          * results are reflected on the UI and not
          * lagging behind
          */
+
+        /* NATHAN CHOI NOTE:
+         * It looks like there is no way to access anything inside this calculator. Any other request types result in 405 - Method not allowed
+         */
+
         this.http.post<RiskScores>('v1/calculate/stsall', req).subscribe(data => {
             this.zone.run(() => {
                 this.scores1[0]["value"] = (data.predmort === null) ? null : (data.predmort * 100).toFixed(3);
@@ -465,35 +470,39 @@ export class FieldsComponent implements OnInit, AfterViewChecked {
             });
         });
 
-        let parseCoeffs = coeffs => {
-            let res = [];
-            coeffs.split('|')
-                .map(x => {
-                    let arr = x.split(',');
-                    res.push({
-                        name: arr[0],
-                        value: arr[1],
-                        coefficient: arr[2]
-                    });
-                });
+        // let parseCoeffs = coeffs => {
+        //     let res = [];
+        //     coeffs.split('|')
+        //         .map(x => {
+        //             let arr = x.split(',');
+        //             res.push({
+        //                 name: arr[0],
+        //                 value: arr[1],
+        //                 coefficient: arr[2]
+        //             });
+        //         });
 
-            return res;
-        };
+        //     return res;
+        // };
 
-        this.http.post<RiskCoeffs>('v1/calculate/coeffs', req).subscribe(data => {
-            this.zone.run(() => {
-                this.coeffs[0]["value"] = (data.coeff_predmort === null) ? null : parseCoeffs(data.coeff_predmort);
-                this.coeffs[1]["value"] = (data.coeff_predrenf === null) ? null : parseCoeffs(data.coeff_predrenf);
-                this.coeffs[2]["value"] = (data.coeff_predstro === null) ? null : parseCoeffs(data.coeff_predstro);
-                this.coeffs[3]["value"] = (data.coeff_predvent === null) ? null : parseCoeffs(data.coeff_predvent);
-                this.coeffs[4]["value"] = (data.coeff_preddeep === null) ? null : parseCoeffs(data.coeff_preddeep);
-                this.coeffs[5]["value"] = (data.coeff_predreop === null) ? null : parseCoeffs(data.coeff_predreop);
-                this.coeffs[6]["value"] = (data.coeff_predmm === null) ? null : parseCoeffs(data.coeff_predmm);
-                this.coeffs[7]["value"] = (data.coeff_pred6d === null) ? null : parseCoeffs(data.coeff_pred6d);
-                this.coeffs[8]["value"] = (data.coeff_pred14d === null) ? null : parseCoeffs(data.coeff_pred14d);
-                this.chRef.detectChanges();
-            });
-        });
+        /* NATHAN CHOI NOTE:
+         * This endpoint is closed on the backend. I was not able to get more than a 404.
+         */
+
+        // this.http.post<RiskCoeffs>('v1/calculate/coeffs', req).subscribe(data => {
+        //     this.zone.run(() => {
+        //         this.coeffs[0]["value"] = (data.coeff_predmort === null) ? null : parseCoeffs(data.coeff_predmort);
+        //         this.coeffs[1]["value"] = (data.coeff_predrenf === null) ? null : parseCoeffs(data.coeff_predrenf);
+        //         this.coeffs[2]["value"] = (data.coeff_predstro === null) ? null : parseCoeffs(data.coeff_predstro);
+        //         this.coeffs[3]["value"] = (data.coeff_predvent === null) ? null : parseCoeffs(data.coeff_predvent);
+        //         this.coeffs[4]["value"] = (data.coeff_preddeep === null) ? null : parseCoeffs(data.coeff_preddeep);
+        //         this.coeffs[5]["value"] = (data.coeff_predreop === null) ? null : parseCoeffs(data.coeff_predreop);
+        //         this.coeffs[6]["value"] = (data.coeff_predmm === null) ? null : parseCoeffs(data.coeff_predmm);
+        //         this.coeffs[7]["value"] = (data.coeff_pred6d === null) ? null : parseCoeffs(data.coeff_pred6d);
+        //         this.coeffs[8]["value"] = (data.coeff_pred14d === null) ? null : parseCoeffs(data.coeff_pred14d);
+        //         this.chRef.detectChanges();
+        //     });
+        // });
 
     }
 
